@@ -130,7 +130,7 @@ function gatherPlayedCards() {
 function computeRemainingCards(playedCards) {
     let playerCount = getPlayerCount();
     let remainingCards = Object.entries(Card)
-        .filter(it => it[1].minPlayerCount >= playerCount)
+        .filter(it => playerCount >= it[1].minPlayerCount)
         .map(it => {
             let count = it[1].count - (playedCards[it[0]] ?? 0)
             return [it[1].score, count]
@@ -155,7 +155,7 @@ function drawBarChart(data) {
             const bar = '█'.repeat(barLength)
             let possibility = Math.floor(item.value / overallCount * 100)
             possibility = possibility.toString().padStart(2, ' ')
-            return `(${item.label}) ${possibility}% | ${bar}${item.value > 0 ? " " : ""}${item.value}`
+            return `(${item.label}) | ${possibility}% | ${bar}${item.value > 0 ? " " : ""}${item.value}`
         })
         .join("\n")
 
@@ -180,6 +180,8 @@ function attachObserver() {
 
     // Start observing the target element
     observer.observe(logsElement, config)
+
+    updateCallback()
 }
 
 function updateCallback() {
