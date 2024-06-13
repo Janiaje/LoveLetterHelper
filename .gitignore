@@ -3,7 +3,7 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-AdventOfCode2023.iml
+LoveLetterHelper.iml
 
 ### Eclipse ###
 .apt_generated
