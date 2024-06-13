@@ -145,8 +145,8 @@ function computeRemainingCards(playedCards) {
 }
 
 function drawBarChart(data) {
-    const maxBarLength = 20 // Maximum length of the bar in characters
-    const maxDataValue = Math.max(...data.map(item => item.value)) // Maximum value in the data set
+    const maxBarLength = 20
+    const maxDataValue = Math.max(...data.map(item => item.value))
     const overallCount = data.reduce((acc, it) => acc + it.value, 0)
 
     let chart = data
