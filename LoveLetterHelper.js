@@ -113,8 +113,11 @@ function getPlayerCount() {
     return document.querySelectorAll(".discardcontent").length
 }
 
-function gatherPlayedCards() {
-    let playedCards = Array.from(document.querySelectorAll(".discardcontent .stockitem"))
+let discardedCardSelector = ".discardcontent"
+let currentCardSelector = ".playertable_S"
+
+function gatherCards(selector) {
+    let playedCards = Array.from(document.querySelectorAll(`${selector} .stockitem`))
         .map(it => it.style.backgroundPositionX)
         .map(position => Object.entries(Card).find(card => card[1].backgroundPositionX === position))
         .groupBy(it => it[0])
@@ -125,6 +128,14 @@ function gatherPlayedCards() {
     })
 
     return Object.fromEntries(playedCards)
+}
+
+function gatherPlayedCards() {
+    return gatherCards(discardedCardSelector)
+}
+
+function gatherCardsFromPlayersHand() {
+    return gatherCards(currentCardSelector)
 }
 
 function computeRemainingCards(playedCards) {
@@ -159,7 +170,7 @@ function drawBarChart(data) {
         })
         .join("\n")
 
-    console.log("Remaining cards:\n" + chart)
+    console.log("Remaining cards:\n(counting the ones in your hand too)\n" + chart)
 }
 
 function attachObserver() {
@@ -187,7 +198,14 @@ function attachObserver() {
 function updateCallback() {
     console.clear()
     let playedCards = gatherPlayedCards()
+    let currentCards = gatherCardsFromPlayersHand()
+
+    Object.entries(currentCards).forEach((card) => {
+        playedCards[card[0]] = (playedCards[card[0]] ?? 0) + card[1]
+    })
+
     let remainingCards = computeRemainingCards(playedCards)
+
     drawBarChart(remainingCards)
 }
 
