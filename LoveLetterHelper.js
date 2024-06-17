@@ -174,24 +174,19 @@ function drawBarChart(data) {
 }
 
 function attachObserver() {
-    // Create a MutationObserver instance
-    const observer = new MutationObserver((mutationsList, observer) => {
-        for (let mutation of mutationsList) {
-            if (mutation.type === 'childList' || mutation.type === 'characterData' || mutation.type === 'subtree') {
-                updateCallback()
-            }
-        }
-    })
-
     // Target the element to observe
     const logsElement = document.getElementById('logs')
 
     // Specify what to observe (attributes, childList, subtree, etc.)
-    const config = {childList: true, characterData: true, subtree: true}
+    const config = {childList: true}
+
+    // Create a MutationObserver instance
+    const observer = new MutationObserver(() => updateCallback())
 
     // Start observing the target element
     observer.observe(logsElement, config)
 
+    // Run callback before first observer call
     updateCallback()
 }
 
