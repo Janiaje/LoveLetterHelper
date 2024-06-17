@@ -181,7 +181,10 @@ function attachObserver() {
     const config = {childList: true}
 
     // Create a MutationObserver instance
-    const observer = new MutationObserver(() => updateCallback())
+    const observer = new MutationObserver(() => {
+        // Delay the updateCallback() call to avoid counting the currently played card twice
+        setTimeout(() => updateCallback(), 500)
+    })
 
     // Start observing the target element
     observer.observe(logsElement, config)
@@ -205,3 +208,61 @@ function updateCallback() {
 }
 
 attachObserver()
+
+// const EventType = Object.freeze({
+//     ACTION: 'ACTION',
+//     GAME_START: 'GAME_START',
+//     UNDEFINED: 'UNDEFINED',
+// })
+//
+// function getLogParts(it) {
+//     return Array.from(it.firstChild.childNodes)
+//         .filter(it => it.nodeName !== "#comment")
+// }
+//
+// function getEventType(children) {
+//     if (children.length > 2 && children[1].textContent.startsWith(" plays ")) {
+//         return EventType.ACTION
+//     }
+//
+//     if (children.length === 1 && children[0].textContent === "A new round begins.") {
+//         return EventType.GAME_START
+//     }
+//
+//     return EventType.UNDEFINED
+// }
+//
+// function getPlayedCard(actionString) {
+//     const match = actionString.match(/^ plays a (.*) against $/)
+//
+//     if (match && match[1]) {
+//         return match[1]
+//     } else {
+//         return "ERROR"
+//     }
+// }
+//
+// function getCurrentGameLogs(logs) {
+//     let gameStartIndex = logs.findIndex(it => {
+//         return it.eventType === EventType.GAME_START
+//     })
+//
+//     return logs.splice(0, gameStartIndex)
+// }
+//
+// let logs = document.getElementById("logs").children
+//
+// logs = Array.from(logs).map(it => {
+//     let children = getLogParts(it)
+//
+//     return {
+//         item: it,
+//         children: children,
+//         eventType: getEventType(children)
+//     }
+// })
+//
+// let playedCards = getCurrentGameLogs(logs)
+//     .filter(it => it.eventType === EventType.ACTION)
+//     .map(it => getPlayedCard(it.children[1].textContent))
+//     .map(it => Object.entries(Card).find(entry => entry[0] === it))
