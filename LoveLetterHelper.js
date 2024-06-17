@@ -114,7 +114,7 @@ function getPlayerCount() {
 }
 
 let discardedCardSelector = ".discardcontent"
-let currentCardSelector = ".playertable_S"
+let currentCardSelector = ".playertable_S .playertablecard"
 
 function gatherCards(selector) {
     let playedCards = Array.from(document.querySelectorAll(`${selector} .stockitem`))
@@ -170,7 +170,7 @@ function drawBarChart(data) {
         })
         .join("\n")
 
-    console.log("Remaining cards:\n(counting the ones in your hand too)\n" + chart)
+    console.log("Remaining cards:\n(excluding the ones in your hand)\n" + chart)
 }
 
 function attachObserver() {
